@@ -11,7 +11,7 @@ A Package to help handel typical Data Engineering Tasks Handel Typical Data Engi
 
 
 ## Status of the project
-current_version = "0.0.1"
+current_version = "1.0.0"
 
 The Data Engineering Toolkit is still under initial development and is being tested with Python 3.11.4 version.
 
@@ -20,6 +20,13 @@ The Data Engineering Toolkit will follow semantic versioning for its releases, w
 * `major` versions might introduce breaking changes
 * `minor` versions usually introduce new features and might introduce deprecations
 * `patch` versions only introduce bug fixes
+
+
+## Replit development
+```shell
+poetry lock --no-update
+poetry install -E dev
+```
 
 ## Local Setup
 
@@ -47,7 +54,7 @@ source venv/bin/activate
 
 ```
 
-# Local development
+### Local development
 ```shell
 (venv) python -m pip install -r requirements.txt
 
@@ -55,7 +62,7 @@ source venv/bin/activate
 (venv) poetry install -E dev
 ```
 
-# Build Package
+## Build Package
 ```shell
 (venv) bumpver update --minor
 (venv) python -m build
