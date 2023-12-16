@@ -4,10 +4,11 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 from typing import List
 
-import pandas as pd
+# Models
+from de_toolkit.models.transformations.pandas.pandas_transformations_models import HandleMissingDataColumn
 
-from models.transformations.pandas.pandas_transformations_models import HandleMissingDataColumn
-from services.util.enforce_attributes_meta import EnforceAttributesMeta
+# Services
+from de_toolkit.services.util.enforce_attributes_meta import EnforceAttributesMeta
 
 
 @dataclass

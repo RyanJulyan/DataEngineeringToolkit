@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from typing import Any
 
 # Brokers
-from brokers.storage.i_storage_broker import IStorageBroker
+from de_toolkit.brokers.storage.i_storage_broker import IStorageBroker
 
 # Services
-from services.storage.i_storage_service import IStorageService
+from de_toolkit.services.storage.i_storage_service import IStorageService
 
 
 @dataclass

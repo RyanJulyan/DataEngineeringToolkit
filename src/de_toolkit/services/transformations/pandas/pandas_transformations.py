@@ -5,7 +5,8 @@ from typing import List
 
 import pandas as pd
 
-from models.transformations.pandas.pandas_transformations_models import HandleMissingDataColumn
+# Models
+from de_toolkit.models.transformations.pandas.pandas_transformations_models import HandleMissingDataColumn
 
 
 @dataclass

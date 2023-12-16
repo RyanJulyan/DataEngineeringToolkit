@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from brokers.storage.i_storage_broker import IStorageBroker
+# Brokers
+from de_toolkit.brokers.storage.i_storage_broker import IStorageBroker
 
 
 class IStorageService(ABC):
