@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "de_toolkit"
-version = "1.0.0"
+name = "data_engineering_toolkit"
+version = "2.0.0"
 description = "Handel Typical Data Engineering Tasks Handel Typical Data Engineering Tasks, including: Storage, Formatting, Tagging / Labelling, Profiling, Cleaning, Rules, Transformations, Encryption. This project is under a proprietary but permissable license. See LICENSE file for more details."
 authors = ["Ryan Julyan <ryan@julyan.biz>"]
 readme = "README.md"
@@ -14,14 +14,15 @@ classifiers = [
 ]
 keywords = ["data-engineering", "storage", "formatting", "tagging", "labelling", "profiling", "cleaning", "rules", "transformations", "encryption", "data"]
 packages = [
-    { include = "de_toolkit", from = "src" }
+    { include = "data_engineering_toolkit", from = "src" }
 ]
-include = ["src/de_toolkit/*"]
+include = ["src/data_engineering_toolkit/*"]
 
 [tool.poetry.dependencies]
 python = ">=3.10.0,<3.11.5"
 pandas = "^2.1.4"
 typing_extensions = "*"
+numpy = "^1.26.2"
 
 [tool.poetry.extras]
 dev = ["black", "mypy", "bumpver", "isort", "pip-tools", "pytest", "pandas-stubs", "build"]
@@ -31,7 +32,7 @@ full = []
 "Homepage" = "https://github.com/RyanJulyan/DataEngineeringToolkit"
 
 [tool.scripts]
-de_toolkit = "de_toolkit.__main__:main"
+data_engineering_toolkit = "data_engineering_toolkit.__main__:main"
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
@@ -57,7 +58,7 @@ push            = false
 
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
-"src/de_toolkit/__init__.py" = [
+"src/data_engineering_toolkit/__init__.py" = [
     '__version__ = "{version}"',
     "{pep440_version}",
 ]
