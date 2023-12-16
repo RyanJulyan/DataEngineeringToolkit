@@ -11,7 +11,7 @@ A Package to help handel typical Data Engineering Tasks Handel Typical Data Engi
 
 
 ## Status of the project
-current_version = "1.0.0"
+current_version = "2.0.0"
 
 The Data Engineering Toolkit is still under initial development and is being tested with Python 3.11.4 version.
 
