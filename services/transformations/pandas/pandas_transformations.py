@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import List
 
@@ -14,8 +16,20 @@ class PandasDataFrameTransformations:
 
   data: pd.DataFrame
 
-  def handle_missing_data(
-      self, column_methods: List[HandleMissingDataColumn]) -> None:
+  def select_columns(self,
+                     columns: List[str]) -> PandasDataFrameTransformations:
+    self.data = self.data[columns]
+    return self
+
+  def select_rows_by_index(self, index):
+    return self.data.loc[index]
+
+  def select_rows_by_condition(self, condition):
+    return self.data[condition]
+
+  def handle_missing_values(
+      self, column_methods: List[HandleMissingDataColumn]
+  ) -> PandasDataFrameTransformations:
     """
         Handle missing data in specified DataFrame columns using specified methods.
 
@@ -28,7 +42,7 @@ class PandasDataFrameTransformations:
                                                            each specifying a column and method for handling missing data.
 
         Returns:
-            None: The method modifies the DataFrame in place.
+            PandasDataFrameTransformations: The method modifies the DataFrame in place.
         """
     for column_method in column_methods:
       if column_method.column_name in self.data.columns:
@@ -41,9 +55,112 @@ class PandasDataFrameTransformations:
                            inplace=True,
                            **column_method.kwargs)
 
+    return self
+
+  def group_by(self, column):
+    return self.data.groupby(column)
+
+  def sort_by_index(self):
+    return self.data.sort_index()
+
+  def sort_by_values(self, column):
+    return self.data.sort_values(by=column)
+
+  def add_new_column(self, column, values):
+    self.data[column] = values
+    return self.data
+
+  def drop_column(self, column):
+    return self.data.drop(column, axis=1)
+
+  def merge_dataframes(self, other_df, on_column, how='inner'):
+    return pd.merge(self.data, other_df, on=on_column, how=how)
+
+  def concat_dataframes(self, other_df):
+    return pd.concat([self.data, other_df])
+
+  def create_pivot_table(self, values, index, columns):
+    return self.data.pivot_table(values=values, index=index, columns=columns)
+
+  def create_crosstab(self, col1, col2):
+    return pd.crosstab(self.data[col1], self.data[col2])
+
+  def apply_function(self, func):
+    return self.data.apply(func)
+
+  def string_contains(self, column, substring):
+    return self.data[column].str.contains(substring)
+
+  def conditional_operation(self, column, condition, true_val, false_val):
+    return np.where(self.data[column] > condition, true_val, false_val)
+
+  # Aggregation methods
+  def group_by_and_transform(self, group_column, new_column, agg_func):
+    """
+      Applies a transformation function to the specified column, partitioning the data 
+      by the given group column. This is similar to PARTITION BY in SQL.
+
+      :param group_column: Column to group by.
+      :param new_column: Name of the new column to be added with the result.
+      :param agg_func: Aggregation function to apply (e.g., 'mean', 'sum', custom function).
+      """
+    self.data[new_column] = self.data.groupby(
+        group_column)[new_column].transform(agg_func)
+    return self.data
+
+  def aggregate_data(self, agg_func):
+    return self.data.aggregate(agg_func)
+
+  def transform(self, column, agg_func):
+    return self.data[column].transform(agg_func)
+
+  # Row operations
+  def add_row(self, row_data):
+    new_row = pd.DataFrame([row_data], columns=self.data.columns)
+    self.data = pd.concat([self.data, new_row], ignore_index=True)
+    return self.data
+
+  def modify_row(self, index, row_data):
+    self.data.loc[index] = row_data
+    return self.data
+
+  def drop_row(self, index):
+    self.data = self.data.drop(index)
+    return self.data
+
+  # Time series analysis
+  def resample_data(self, rule, agg_func='mean'):
+    return self.data.resample(rule).agg(agg_func)
+
+  def rolling_window(self, window, agg_func='mean'):
+    return self.data.rolling(window=window).agg(agg_func)
+
+  # More advanced column operations
+  def arithmetic_operation(self, column, operation, value):
+    if operation == 'add':
+      self.data[column] += value
+    elif operation == 'subtract':
+      self.data[column] -= value
+    elif operation == 'multiply':
+      self.data[column] *= value
+    elif operation == 'divide':
+      self.data[column] /= value
+    return self.data
+
+  # More advanced mapping
+  def map_values(self, column, mapping_dict):
+    self.data[column] = self.data[column].map(mapping_dict)
+    return self.data
+
+  # More complex conditional operations
+  def conditional_apply(self, column, condition_func, apply_func):
+    self.data.loc[condition_func(self.data),
+                  column] = self.data.loc[condition_func(self.data),
+                                          column].apply(apply_func)
+    return self.data
+
 
 if __name__ == "__main__":
-
   # Example Usage
   import numpy as np
 

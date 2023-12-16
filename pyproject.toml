@@ -1,8 +1,7 @@
 [tool.poetry]
 name = "Data-Engineering"
 version = "0.0.1"
-description = "Handel Typical Data Engineering Tasks includeing: Storage, Formatting, Tag / Label, Profiling, Cleaning, Rules (DQ), Transformations, Encryption
-"
+description = "Handel Typical Data Engineering Tasks Handel Typical Data Engineering Tasks, including: Storage, Formatting, Tag / Label, Profiling, Cleaning, Rules, Transformations, Encryption"
 authors = ["Ryan Julyan <ryan@julyan.biz>"]
 
 [tool.poetry.dependencies]

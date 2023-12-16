@@ -2,14 +2,15 @@ import numpy as np
 import pandas as pd
 
 from models.transformations.pandas.pandas_transformations_models import HandleMissingDataColumn
+
 from models.formatting.pandas.pandas_formatter_models import (
     ConvertColumnToType,
-    RoundColumnDecimalPlaces,
+    ConvertToDateTime,
+    FormatDateTimeColumn,
     FormatFloatColumn,
     FormatStringColumn,
     RenameColumn,
-    ConvertToDateTime,
-    FormatDateTimeColumn,
+    RoundColumnDecimalPlaces,
     SortDetails,
 )
 from services.formatting.pandas.pandas_formatter import PandasDataFrameFormatter
@@ -31,7 +32,7 @@ formatter = PandasDataFrameFormatter(df)
 formatter.set_display_options(max_rows=10)
 
 # Example: Converting data types
-formatter.convert_type([
+formatter.convert_data_type([
     ConvertColumnToType(column_name="A", dtype_name="float"),
 ])
 
@@ -83,7 +84,7 @@ df = formatter.data
 transformations = PandasDataFrameTransformations(df)
 
 # Apply different missing data handling methods to different columns
-transformations.handle_missing_data([
+transformations.handle_missing_values([
     HandleMissingDataColumn(column_name='E', method="fillna", value=0),
     HandleMissingDataColumn(column_name='F', method="dropna"),
 ])

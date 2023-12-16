@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import Any, Callable, List, Optional
 
@@ -5,12 +7,12 @@ import pandas as pd
 
 from models.formatting.pandas.pandas_formatter_models import (
     ConvertColumnToType,
-    RoundColumnDecimalPlaces,
+    ConvertToDateTime,
+    FormatDateTimeColumn,
     FormatFloatColumn,
     FormatStringColumn,
     RenameColumn,
-    ConvertToDateTime,
-    FormatDateTimeColumn,
+    RoundColumnDecimalPlaces,
     SortDetails,
 )
 from services.formatting.i_formatter import IFormatter
@@ -22,18 +24,19 @@ class PandasDataFrameFormatter(IFormatter):
 
   data: pd.DataFrame
 
-  def set_display_options(self,
-                          max_rows: Optional[int] = None,
-                          max_columns: Optional[int] = None,
-                          precision: Optional[int] = None) -> None:
+  def set_display_options(
+      self,
+      max_rows: Optional[int] = None,
+      max_columns: Optional[int] = None,
+      precision: Optional[int] = None) -> PandasDataFrameFormatter:
     """
-        Set display options for the DataFrame.
+    Set display options for the DataFrame.
 
-        Args:
-            max_rows (Optional[int]): Maximum number of rows to display.
-            max_columns (Optional[int]): Maximum number of columns to display.
-            precision (Optional[int]): Decimal precision for displaying floats.
-        """
+    Args:
+        max_rows (Optional[int]): Maximum number of rows to display.
+        max_columns (Optional[int]): Maximum number of columns to display.
+        precision (Optional[int]): Decimal precision for displaying floats.
+    """
     if max_rows is not None:
       pd.set_option("display.max_rows", max_rows)
     if max_columns is not None:
@@ -41,50 +44,63 @@ class PandasDataFrameFormatter(IFormatter):
     if precision is not None:
       pd.set_option("display.precision", precision)
 
-  def apply_style(self, styler_function: Callable) -> Any:
+    return self
+
+  def apply_style(self, styler_function: Callable) -> PandasDataFrameFormatter:
     """
-        Apply a styling function to the DataFrame.
+    Apply a styling function to the DataFrame.
 
-        Args:
-            styler_function (Callable): A function to apply for styling.
+    Args:
+        styler_function (Callable): A function to apply for styling.
 
-        Returns:
-            pd.io.formats.style.Styler: The styled DataFrame.
-        """
-    return self.data.style.apply(styler_function)
-
-  def convert_type(self, column_details: List[ConvertColumnToType]) -> None:
+    Returns:
+        pd.io.formats.style.Styler: The styled DataFrame.
     """
-        Convert the data types of specified columns.
+    self.data.style.apply(styler_function)
 
-        Args:
-            column_details (List[ConvertColumnToType]): A list of ConvertColumnToType instances specifying column and type to convert to.
-        """
+    return self
+
+  def convert_data_type(
+      self,
+      column_details: List[ConvertColumnToType]) -> PandasDataFrameFormatter:
+    """
+    Convert the data types of specified columns.
+
+    Args:
+        column_details (List[ConvertColumnToType]): A list of ConvertColumnToType instances specifying column and type to convert to.
+    """
     for column in column_details:
       if column.column_name in self.data.columns:
         self.data[column.column_name] = self.data[column.column_name].astype(
             column.dtype_name)
 
-  def round_value(self,
-                  column_details: List[RoundColumnDecimalPlaces]) -> None:
-    """
-        Round the values in specified columns to a set number of decimal places.
+    return self
 
-        Args:
-            column_details (List[RoundColumnDecimalPlaces]): A list of RoundColumnDecimalPlaces instances specifying column and the number of decimal places.
-        """
+  def round_value(
+      self, column_details: List[RoundColumnDecimalPlaces]
+  ) -> PandasDataFrameFormatter:
+    """
+    Round the values in specified columns to a set number of decimal places.
+
+    Args:
+        column_details (List[RoundColumnDecimalPlaces]): A list of RoundColumnDecimalPlaces instances specifying column and the number of decimal places.
+    """
     for column in column_details:
       if column.column_name in self.data.columns:
         self.data[column.column_name] = self.data[column.column_name].round(
             column.decimal_places)
 
-  def format_floats(self, column_details: List[FormatFloatColumn]) -> None:
-    """
-        Apply formatting to float values in specified columns.
+    return self
 
-        Args:
-            column_details (List[FormatFloatColumn]): A list of FormatFloatColumn instances specifying column and the format string.
-        """
+  def format_floats(
+      self,
+      column_details: List[FormatFloatColumn]) -> PandasDataFrameFormatter:
+    """
+    Apply formatting to float values in specified columns.
+
+    Args:
+        column_details (List[FormatFloatColumn]): A list of FormatFloatColumn instances specifying column and the format string.
+    """
     for column_format in column_details:
       if column_format.column_name in self.data.columns:
         self.data[column_format.column_name] = self.data[
@@ -92,40 +108,51 @@ class PandasDataFrameFormatter(IFormatter):
                 lambda x: column_format.format_string.format(x)
                 if isinstance(x, float) else x)
 
-  def format_strings(self, column_formats: List[FormatStringColumn]) -> None:
-    """
-        Apply string methods to specified columns.
+    return self
 
-        Args:
-            column_formats (List[FormatStringColumn]): A list of FormatStringColumn instances specifying column and the string method to apply.
-        """
+  def format_strings(
+      self,
+      column_formats: List[FormatStringColumn]) -> PandasDataFrameFormatter:
+    """
+    Apply string methods to specified columns.
+
+    Args:
+        column_formats (List[FormatStringColumn]): A list of FormatStringColumn instances specifying column and the string method to apply.
+    """
     for column_format in column_formats:
       if column_format.column_name in self.data.columns:
         self.data[column_format.column_name] = self.data[
             column_format.column_name].apply(lambda x: getattr(
                 x, column_format.string_method)() if isinstance(x, str) else x)
 
-  def rename_columns(self, rename_details: List[RenameColumn]) -> None:
-    """
-        Rename specified columns.
+    return self
 
-        Args:
-            rename_details (List[RenameColumn]): A list of RenameColumn instances specifying current and new column names.
-        """
+  def rename_columns(
+      self, rename_details: List[RenameColumn]) -> PandasDataFrameFormatter:
+    """
+    Rename specified columns.
+
+    Args:
+        rename_details (List[RenameColumn]): A list of RenameColumn instances specifying current and new column names.
+    """
     rename_dict = {
         rename.current_name: rename.new_name
         for rename in rename_details
     }
     self.data.rename(columns=rename_dict, inplace=True)
 
-  def sort_data(self, sort_details: List[SortDetails], axis: int = 0) -> None:
-    """
-        Sort the DataFrame by specified columns.
+    return self
 
-        Args:
-            sort_details (List[SortDetails]): A list of SortDetails instances specifying column names and their corresponding sort order.
-            axis (int): Axis to be sorted. 0 for index, 1 for columns.
-        """
+  def sort_data(self,
+                sort_details: List[SortDetails],
+                axis: int = 0) -> PandasDataFrameFormatter:
+    """
+    Sort the DataFrame by specified columns.
+
+    Args:
+        sort_details (List[SortDetails]): A list of SortDetails instances specifying column names and their corresponding sort order.
+        axis (int): Axis to be sorted. 0 for index, 1 for columns.
+    """
     sort_columns = [detail.column_name for detail in sort_details]
     sort_orders = [detail.ascending for detail in sort_details]
     self.data.sort_values(by=sort_columns,
@@ -133,31 +160,40 @@ class PandasDataFrameFormatter(IFormatter):
                           ascending=sort_orders,
                           inplace=True)
 
-  def to_datetime(self, datetime_columns: List[ConvertToDateTime]) -> None:
-    """
-        Convert specified columns to datetime.
+    return self
 
-        Args:
-            datetime_columns (List[ConvertToDateTime]): A list of ConvertToDateTime instances specifying column and the date format.
-        """
+  def to_datetime(
+      self,
+      datetime_columns: List[ConvertToDateTime]) -> PandasDataFrameFormatter:
+    """
+    Convert specified columns to datetime.
+
+    Args:
+        datetime_columns (List[ConvertToDateTime]): A list of ConvertToDateTime instances specifying column and the date format.
+    """
     for column in datetime_columns:
       if column.column_name in self.data.columns:
         self.data[column.column_name] = pd.to_datetime(
             self.data[column.column_name], format=column.date_format)
 
-  def format_datetime(self,
-                      datetime_formats: List[FormatDateTimeColumn]) -> None:
-    """
-        Format datetime columns based on specified formats.
+    return self
 
-        Args:
-            datetime_formats (List[FormatDateTimeColumn]): A list of FormatDateTimeColumn instances specifying column and the format string for datetime.
-        """
+  def format_datetime(
+      self, datetime_formats: List[FormatDateTimeColumn]
+  ) -> PandasDataFrameFormatter:
+    """
+    Format datetime columns based on specified formats.
+
+    Args:
+        datetime_formats (List[FormatDateTimeColumn]): A list of FormatDateTimeColumn instances specifying column and the format string for datetime.
+    """
     for datetime_format in datetime_formats:
       if datetime_format.column_name in self.data.columns:
         self.data[datetime_format.column_name] = self.data[
             datetime_format.column_name].dt.strftime(
                 datetime_format.format_string)
+
+    return self
 
 
 if __name__ == "__main__":
