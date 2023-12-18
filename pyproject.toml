@@ -23,6 +23,7 @@ python = ">=3.10.0,<3.11.5"
 pandas = "^2.1.4"
 typing_extensions = "*"
 numpy = "^1.26.2"
+ydata-profiling = "^4.6.3"
 
 [tool.poetry.extras]
 dev = ["black", "mypy", "bumpver", "isort", "pip-tools", "pytest", "pandas-stubs", "build"]

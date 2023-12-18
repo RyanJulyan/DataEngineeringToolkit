@@ -64,7 +64,7 @@ class PandasDataFrameTransformations:
         Args:
             index (int): The index to search and return data based on
         """
-        return self.data.loc[index]
+        return self.data.loc[index:index]
 
     def select_rows_by_conditions(
         self, condition_operations: List[SelectConditionOperation]
