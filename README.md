@@ -1,5 +1,5 @@
 # Data Engineering Toolkit
-A Package to help handel typical Data Engineering Tasks Handel Typical Data Engineering Tasks, including: 
+A Package to help Handel Typical Data Engineering Tasks, including: 
 * Storage
 * Formatting
 * Tagging / Labelling
