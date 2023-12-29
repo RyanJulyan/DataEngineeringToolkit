@@ -28,6 +28,9 @@ osmium = "*"
 requests = "*"
 tqdm = "*"
 beautifulsoup4 = "*"
+scikit-learn = "*"
+scipy = "*"
+imbalanced-learn = "*"
 
 [tool.poetry.dev-dependencies]
 black = "*"

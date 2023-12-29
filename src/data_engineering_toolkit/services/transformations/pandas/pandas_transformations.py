@@ -737,6 +737,26 @@ class PandasDataFrameTransformations:
 
         return self
 
+    def feature_engineering(
+        self, new_feature_name: str, function: Callable, *args: Any
+    ) -> PandasDataFrameTransformations:
+        """
+        Creates a new feature in the DataFrame based on a specified function.
+
+        Args:
+            new_feature_name (str): The name of the new feature to be created.
+            function (Callable): The function to apply to each row to generate the new feature.
+            *args (Any): Additional arguments to pass to the function.
+
+        Returns:
+            PandasDataFrameCleaner: The modified DataFrame cleaner instance.
+        """
+        self.dataframe[new_feature_name] = self.dataframe.apply(
+            lambda row: function(row, *args), axis=1
+        )
+
+        return self
+
 
 if __name__ == "__main__":
     # Example Usage
