@@ -28,6 +28,11 @@ poetry lock --no-update
 poetry install -E dev
 ```
 
+## Install latest Build Using PyPi
+```shell
+pip install data_engineering_toolkit
+```
+
 ## Local Setup
 
 ### Windows
@@ -58,6 +63,7 @@ source venv/bin/activate
 ```shell
 (venv) python -m pip install -r requirements.txt
 
+(venv) (venv) $ poetry init
 (venv) poetry lock --no-update
 (venv) poetry install -E dev
 ```
@@ -65,5 +71,16 @@ source venv/bin/activate
 ## Build Package
 ```shell
 (venv) bumpver update --minor
-(venv) python -m build
+(venv) poetry build
+```
+
+## Publish Test Package
+```shell
+(venv) poetry config repositories.testpypi https://test.pypi.org/legacy/
+(venv) poetry publish -r testpypi
+```
+
+## Publish Live Package
+```shell
+(venv) poetry publish
 ```
