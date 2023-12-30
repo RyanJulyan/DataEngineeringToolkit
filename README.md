@@ -2,6 +2,7 @@
 A Package to help Handel Typical Data Engineering Tasks, including: 
 * Storage
 * Formatting
+* Validation
 * Tagging / Labelling
 * Profiling
 * Cleaning
