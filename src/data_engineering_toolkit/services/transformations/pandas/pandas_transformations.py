@@ -90,35 +90,51 @@ class PandasDataFrameTransformations:
 
         return self
 
-    def handle_missing_values(
-        self, column_methods: List[HandleMissingDataColumn]
+    def filter_data_boolean(
+        self, condition: Callable
     ) -> PandasDataFrameTransformations:
         """
-        Handle missing data in specified DataFrame columns using specified methods.
-
-        This method iterates over a list of HandleMissingDataColumn instances,
-        each specifying a column and how to handle its missing data. The handling
-        can be either filling missing data (fillna) or dropping rows with missing data (dropna).
+        Filter data using boolean indexing.
 
         Args:
-            column_methods (List[HandleMissingDataColumn]): A list of HandleMissingDataColumn instances,
-                                                           each specifying a column and method for handling missing data.
+            condition (Callable): A function that takes the DataFrame and returns a boolean series.
 
         Returns:
             PandasDataFrameTransformations: The method modifies the DataFrame in place.
         """
-        for column_method in column_methods:
-            if column_method.column_name in self.data.columns:
-                if column_method.method == "fillna":
-                    self.data[column_method.column_name] = self.data[
-                        column_method.column_name
-                    ].fillna(column_method.value, **column_method.kwargs)
-                elif column_method.method == "dropna":
-                    self.data.dropna(
-                        subset=[column_method.column_name],
-                        inplace=True,
-                        **column_method.kwargs,
-                    )
+        self.data = self.data[condition(self.data)]
+
+        return self
+
+    def filter_data_query(self, query_string: str) -> PandasDataFrameTransformations:
+        """
+        Filter data using a query string.
+
+        Args:
+            query_string (str): The query string to filter data.
+
+        Returns:
+            PandasDataFrameTransformations: The method modifies the DataFrame in place.
+        """
+        self.data = self.data.query(query_string)
+
+        return self
+
+    def join_dataframes(
+        self, other_df: pd.DataFrame, on: str = None, how: str = "left"
+    ) -> PandasDataFrameTransformations:
+        """
+        Join the current DataFrame with another DataFrame.
+
+        Args:
+            other_df (pd.DataFrame): The DataFrame to join with.
+            on (str): The column name to join on.
+            how (str): Type of join - 'left', 'right', 'inner', 'outer'.
+
+        Returns:
+            PandasDataFrameTransformations: The method modifies the DataFrame in place.
+        """
+        self.data = self.data.join(other_df, on=on, how=how)
 
         return self
 
@@ -138,17 +154,6 @@ class PandasDataFrameTransformations:
         """
 
         self.data.groupby(columns)
-
-        return self
-
-    def sort_by_index(self) -> PandasDataFrameTransformations:
-        """
-        Sort values in the DataFrame by the index
-
-        Returns:
-            PandasDataFrameTransformations: The method modifies the DataFrame in place.
-        """
-        self.data = self.data.sort_index()
 
         return self
 
