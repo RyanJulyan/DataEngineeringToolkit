@@ -133,3 +133,6 @@ dmypy.json
 
 # Open Street Maps Data
 *.osm.pbf
+
+# Replit
+**/.local
