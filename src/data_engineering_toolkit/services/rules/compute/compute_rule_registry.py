@@ -4,10 +4,12 @@ from collections import defaultdict
 from typing import Any, Dict, List
 
 # Services
-from data_engineering_toolkit.services.rules.base_rule import BaseRule
+from data_engineering_toolkit.services.rules.compute.base_compute_rule import (
+    BaseComputeRule,
+)
 
 
-class RuleRegistry:
+class ComputeRuleRegistry:
     """
     A class for managing a collection of rules and their dependencies.
 
@@ -15,16 +17,16 @@ class RuleRegistry:
     It supports adding rules, checking for circular dependencies, and applying all rules to a given dataset.
 
     Attributes:
-        rules (Dict[str, BaseRule]): A mapping of rule names to rule instances.
+        rules (Dict[str, BaseComputeRule]): A mapping of rule names to rule instances.
         graph (defaultdict[List[str]]): A dependency graph representing rule dependencies.
         indegree (defaultdict[int]): A mapping of rule names to their indegree (number of dependencies).
-        priority_queue (List[BaseRule]): A priority queue of rules ordered by priority and addition order.
+        priority_queue (List[BaseComputeRule]): A priority queue of rules ordered by priority and addition order.
         addition_order (Dict[str, int]): A mapping of rule names to their addition order.
         rule_counter (int): A counter to keep track of the addition order of rules.
         raise_error_on_rule_apply_exception (bool): A flag to determine if an error should be raised when a rule application fails.
 
     Methods:
-        add_rule(rule: BaseRule): Adds a rule to the registry, resolving its dependencies.
+        add_rule(rule: BaseComputeRule): Adds a rule to the registry, resolving its dependencies.
         apply_all(data: Any) -> Any: Applies all rules in the registry to the given data.
     """
 
@@ -33,19 +35,19 @@ class RuleRegistry:
         raise_error_on_rule_apply_exception: bool = False,
     ):
         """
-        Initializes a new instance of the RuleRegistry class.
+        Initializes a new instance of the ComputeRuleRegistry class.
 
         Args:
             raise_error_on_rule_apply_exception (bool, optional): Flag to raise an exception if a rule application fails. Defaults to False.
         """
 
-        self.rules: Dict[str, BaseRule] = {}  # Rule name to rule mapping
+        self.rules: Dict[str, BaseComputeRule] = {}  # Rule name to rule mapping
         self.graph: defaultdict[List[str]] = defaultdict(list)  # Dependency graph
         self.indegree: defaultdict[int] = defaultdict(
             int
         )  # Number of dependencies for each rule
         self.priority_queue: List[
-            BaseRule
+            BaseComputeRule
         ] = []  # Initialize an empty list for the priority queue
         self.addition_order: Dict[str, int] = {}  # Track the order of rule additions
         self.rule_counter: int = 0  # Counter to track addition order
@@ -53,17 +55,17 @@ class RuleRegistry:
             raise_error_on_rule_apply_exception
         )
 
-    def _add_to_priority_queue(self, rule: BaseRule) -> None:
+    def _add_to_priority_queue(self, rule: BaseComputeRule) -> None:
         """Add a rule to the priority queue.
 
         Args:
-            rule (BaseRule): The rule to be added.
+            rule (BaseComputeRule): The rule to be added.
         """
 
         # Add rule to the priority queue with priority and addition order as key
         heapq.heappush(self.priority_queue, rule)
 
-    def add_rule(self, rule: BaseRule) -> None:
+    def add_rule(self, rule: BaseComputeRule) -> None:
         """
         Add a rule to the registry, automatically resolving and adding its dependencies first.
 
@@ -76,7 +78,7 @@ class RuleRegistry:
         It assumes that the dependency graph does not contain cycles.
 
         Parameters:
-        - rule (BaseRule): The rule to be added to the registry. The rule must have a 'depends_on' attribute,
+        - rule (BaseComputeRule): The rule to be added to the registry. The rule must have a 'depends_on' attribute,
                        which is a list of other Rule instances that it depends on.
 
         Side Effects:
@@ -94,7 +96,7 @@ class RuleRegistry:
         # Now add the rule itself
         self._add_or_update_rule(rule)
 
-    def _add_or_update_rule(self, rule: BaseRule) -> None:
+    def _add_or_update_rule(self, rule: BaseComputeRule) -> None:
         """
         Add a new rule to the registry or update an existing rule based on its name.
 
@@ -106,7 +108,7 @@ class RuleRegistry:
         does not have any dependencies (i.e., its indegree is zero), it is added to a priority queue.
 
         Parameters:
-        - rule (BaseRule): The rule to add or update. It must have attributes like 'name', 'priority',
+        - rule (BaseComputeRule): The rule to add or update. It must have attributes like 'name', 'priority',
                        'depends_on', and 'args'.
 
         Side Effects:
