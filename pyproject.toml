@@ -31,6 +31,7 @@ beautifulsoup4 = "*"
 scikit-learn = "*"
 scipy = "*"
 imbalanced-learn = "*"
+jsonschema = "*"
 
 [tool.poetry.dev-dependencies]
 black = "*"
