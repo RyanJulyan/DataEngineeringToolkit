@@ -151,16 +151,6 @@ class GroupByOperation:
 
 
 @dataclass
-class HandleMissingDataColumn:
-    column_name: str
-    method: str
-    value: Optional[Any] = None  # Used for fillna
-    kwargs: Optional[Dict[Any, Any]] = field(
-        default_factory=dict
-    )  # Additional Kwargs for function
-
-
-@dataclass
 class MapValuesOperation:
     column: str
     mapping_dict: Dict[

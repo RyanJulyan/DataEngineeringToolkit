@@ -22,7 +22,6 @@ from data_engineering_toolkit.models.transformations.pandas.pandas_transformatio
     CrosstabOperation,
     DropRowOperation,
     GroupByOperation,
-    HandleMissingDataColumn,
     MapValuesOperation,
     MergeOperation,
     ModifyRowOperation,
@@ -34,9 +33,14 @@ from data_engineering_toolkit.models.transformations.pandas.pandas_transformatio
     StringContainsOperation,
 )
 
+# Services
+from data_engineering_toolkit.services.transformations.i_transformations import (
+    ITransformations,
+)
+
 
 @dataclass
-class PandasDataFrameTransformations:
+class PandasDataFrameTransformations(ITransformations):
     """
     A class for performing various transformations on a pandas DataFrames in different ways.
     """
@@ -812,18 +816,6 @@ if __name__ == "__main__":
     print(transformations.data)
     print()
 
-    # Apply different missing data handling methods to different columns
-    transformations.handle_missing_values(
-        [
-            HandleMissingDataColumn(column_name="E", method="fillna", value=0),
-            HandleMissingDataColumn(column_name="F", method="dropna"),
-        ]
-    )
-
-    print("handle_missing_values")
-    print(transformations.data)
-    print()
-
     # Define a function to generate values for a new column
     def calculate_new_column(df):
         return df["A"] * 2  # Example operation
@@ -831,7 +823,7 @@ if __name__ == "__main__":
     # Define new columns to add
     new_columns = [
         NewColumn(
-            column_name="NewColumn1", values=[1, 2, 3, 4, 5]
+            column_name="NewColumn1", values=[1, 2, 3, 4, 5, 6]
         ),  # Adding a column with a list of values
         NewColumn(
             column_name="NewColumn2", values=calculate_new_column
