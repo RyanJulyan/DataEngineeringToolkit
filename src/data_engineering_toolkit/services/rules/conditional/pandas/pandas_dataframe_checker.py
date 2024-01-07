@@ -91,7 +91,7 @@ class PandasDataFrameChecker(IDataFrameChecker):
 
     def __init__(
         self,
-        df: pd.DataFrame,
+        data: pd.DataFrame,
         custom_functions: Dict[str, Callable[..., Any]] = None,
         custom_rules_schema: Dict[str, Any] = None,
         formatter: string.Formatter = None,
@@ -100,16 +100,21 @@ class PandasDataFrameChecker(IDataFrameChecker):
         Initialize the PandasDataFrameChecker with a DataFrame, custom functions, and a formatter.
 
         Parameters:
-            df (pd.DataFrame): The DataFrame to check.
+            data (pd.DataFrame): The DataFrame to check.
             custom_functions (Dict[str, Callable[..., Any]], optional): A dictionary of custom functions. Defaults to None.
             formatter (string.Formatter, optional): A custom formatter for column names. Defaults to GracefulKeyFormatter.
         """
-        self.df = df
-        self.formatter = formatter or GracefulKeyFormatter()
-        self.rules_schema = custom_rules_schema or self.DEFAULT_RULES_SCHEMA
+        self.data: pd.DataFrame = data
+        self.formatter: string.Formatter = formatter or GracefulKeyFormatter()
+        self.rules_schema: Dict[str, Any] = (
+            custom_rules_schema or self.DEFAULT_RULES_SCHEMA
+        )
 
         # Merge default functions with custom functions
-        self.functions = {**self.DEFAULT_FUNCTIONS, **(custom_functions or {})}
+        self.functions: Dict[str, Callable[..., Any]] = {
+            **self.DEFAULT_FUNCTIONS,
+            **(custom_functions or {}),
+        }
 
     def check_rules(self, rules: Dict) -> bool:
         """
@@ -160,11 +165,11 @@ class PandasDataFrameChecker(IDataFrameChecker):
                 raise ValueError(f"Function '{function_name}' not found.")
 
             column_name = self.formatter.format(format_str, **format_kwargs)
-            self.df[column_name] = self.df[column].apply(
+            self.data[column_name] = self.data[column].apply(
                 self._apply_function_wrapper(function, fact)
             )
 
-        return self.df
+        return self.data
 
     @staticmethod
     def _apply_function_wrapper(

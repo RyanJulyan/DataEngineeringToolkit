@@ -1,17 +1,34 @@
+import string
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, List
 
 import pandas as pd
 
+# Services
+from data_engineering_toolkit.services.util.enforce_attributes_meta import (
+    EnforceAttributesMeta,
+)
 
-class IDataFrameChecker(ABC):
+
+class IDataFrameChecker(metaclass=EnforceAttributesMeta):
     """
     Abstract base class for DataFrame checkers.
     """
 
+    __required_attributes__: List[str] = [
+        "data",
+        "custom_functions",
+        "custom_rules_schema",
+        "formatter",
+    ]
+
     @abstractmethod
     def __init__(
-        self, df: pd.DataFrame, custom_functions: Dict[str, Callable[..., Any]] = None
+        self,
+        data: Any,
+        custom_functions: Dict[str, Callable[..., Any]] = None,
+        custom_rules_schema: Dict[str, Any] = None,
+        formatter: string.Formatter = None,
     ):
         """
         Initialize the checker with a DataFrame.
