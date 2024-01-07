@@ -10,16 +10,16 @@ from data_engineering_toolkit.services.storage.i_storage_service import IStorage
 
 @dataclass
 class DefaultSourceService(IStorageService):
-  storage_broker: IStorageBroker
+    storage_broker: IStorageBroker
 
-  def create(self, **create_kwargs) -> Any:
-    return self.storage_broker.create(**create_kwargs)
+    def create(self, **create_kwargs) -> Any:
+        return self.storage_broker.create(**create_kwargs)
 
-  def read(self, **read_kwargs) -> Any:
-    return self.storage_broker.read(**read_kwargs)
+    def read(self, **read_kwargs) -> Any:
+        return self.storage_broker.read(**read_kwargs)
 
-  def update(self, **update_kwargs) -> Any:
-    return self.storage_broker.update(**update_kwargs)
+    def update(self, **update_kwargs) -> Any:
+        return self.storage_broker.update(**update_kwargs)
 
-  def delete(self, **delete_kwargs) -> Any:
-    return self.storage_broker.delete(**delete_kwargs)
+    def delete(self, **delete_kwargs) -> Any:
+        return self.storage_broker.delete(**delete_kwargs)
