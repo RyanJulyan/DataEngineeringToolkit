@@ -32,6 +32,10 @@ scikit-learn = "*"
 scipy = "*"
 imbalanced-learn = "*"
 jsonschema = "*"
+openpyxl = "*"
+pyarrow = "*"
+sqlalchemy = "*"
+google-cloud-bigquery = "*"
 
 [tool.poetry.dev-dependencies]
 black = "*"
