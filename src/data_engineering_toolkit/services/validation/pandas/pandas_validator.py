@@ -49,7 +49,7 @@ class PandasDataFrameValidator:
         invalid_data = self.data[~self.data["is_valid"]]
         return invalid_data.drop(columns="is_valid")
 
-    def validate(self) -> DataFrameValidator:
+    def validate(self) -> PandasDataFrameValidator:
         """
         Apply JSON schema validation to a DataFrame.
 
