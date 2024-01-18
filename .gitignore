@@ -135,4 +135,5 @@ dmypy.json
 *.osm.pbf
 
 # Replit
+.local/*
 **/.local
