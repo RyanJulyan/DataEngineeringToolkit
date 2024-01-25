@@ -13,7 +13,7 @@ from data_engineering_toolkit.services.util.get_default_class_parameters import 
 
 @enforce_function_signature(
     target_signature=select_features_stratergy_function_template)
-def k_neighbors_regressor_strategy(
+def select_features_k_neighbors_regressor_strategy(
     data: pd.DataFrame,
     target_column: str,
     n_features: int,
@@ -71,6 +71,6 @@ if __name__ == "__main__":
   df = pd.DataFrame(data)
 
   print(
-      k_neighbors_regressor_strategy(data=df,
-                                     target_column="calories",
-                                     n_features=2))
+      select_features_k_neighbors_regressor_strategy(data=df,
+                                                     target_column="calories",
+                                                     n_features=2))
