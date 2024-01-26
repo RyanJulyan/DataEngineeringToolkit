@@ -47,15 +47,18 @@ def select_features_k_neighbors_regressor_strategy(
   if model is None:
     model = KNeighborsRegressor(n_neighbors=n_neighbors)
 
-  model.fit(data, data[target_column])
-  results = permutation_importance(model,
-                                   data,
-                                   data[target_column],
-                                   scoring=scoring)
-  df_importances = pd.DataFrame(data={
-      'Attribute': data.columns,
-      'Importance': results.importances_mean
-  })
+  model.fit(data.drop(columns=target_column), data[target_column])
+  results = permutation_importance(
+      model,
+      data.drop(columns=target_column),
+      data[target_column],
+      scoring=scoring,
+  )
+  df_importances = pd.DataFrame(
+      data={
+          'Attribute': data.columns.drop(target_column),
+          'Importance': results.importances_mean
+      })
   df_importances = df_importances.sort_values(by='Importance', ascending=False)
   df_coefficients_importances = df_importances.head(n_features)
   return set(df_coefficients_importances['Attribute'].to_list())
