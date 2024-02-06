@@ -30,7 +30,7 @@ poetry lock --no-update
 poetry install -E dev
 ```
 
-## Install latest Build Using PyPi
+## Install latest Build Using PyPi _(NOT LIVE YET)_
 ```shell
 pip install data_engineering_toolkit
 ```
