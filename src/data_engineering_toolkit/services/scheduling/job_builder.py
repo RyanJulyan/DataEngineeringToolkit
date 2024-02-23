@@ -5,7 +5,7 @@ from typing import Optional, Union
 
 import schedule
 
-from scheduler_model import Scheduler
+from data_engineering_toolkit.services.scheduling.scheduler_model import Scheduler
 
 
 @dataclass

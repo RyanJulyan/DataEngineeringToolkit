@@ -4,9 +4,9 @@ from typing import Dict, Optional, Set
 
 import schedule
 
-from job_builder_factory import JobBuilderFactory
-from job_model import Job
-from scheduler_model import Scheduler
+from data_engineering_toolkit.services.scheduling.job_builder_factory import JobBuilderFactory
+from data_engineering_toolkit.services.scheduling.job_model import Job
+from data_engineering_toolkit.services.scheduling.scheduler_model import Scheduler
 
 
 @dataclass

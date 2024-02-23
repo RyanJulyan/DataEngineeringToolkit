@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
 
+
+from ydata_profiling import ProfileReport
+
 # Models
-from data_engineering_toolkit.models.transformations.pandas.pandas_transformations_models import (
-    HandleMissingDataColumn, )
+
 from data_engineering_toolkit.models.formatting.pandas.pandas_formatter_models import (
     ConvertColumnToType,
     ConvertToDateTime,
@@ -87,12 +89,6 @@ print()
 
 df = formatter.data
 transformations = PandasDataFrameTransformations(df)
-
-# Apply different missing data handling methods to different columns
-transformations.handle_missing_values([
-    HandleMissingDataColumn(column_name="E", method="fillna", value=0),
-    HandleMissingDataColumn(column_name="F", method="dropna"),
-])
 
 print(transformations.data)
 print()

@@ -3,7 +3,7 @@ from typing import Dict
 
 import schedule
 
-from job_model import Job
+from data_engineering_toolkit.services.scheduling.job_model import Job
 
 
 @dataclass
