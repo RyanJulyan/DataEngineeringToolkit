@@ -10,6 +10,7 @@ A Package to help Handel Typical Data Engineering Tasks, including:
 * Transformations
 * Bussiness Rules
 * Encryption
+* State Machine (State Transition)
 
 
 ## Status of the project
