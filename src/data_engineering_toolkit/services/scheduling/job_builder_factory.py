@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import Any
 
-from job_builder import JobBuilder
-from job_model import Job
-from scheduler_model import Scheduler
+from data_engineering_toolkit.services.scheduling.job_builder import JobBuilder
+from data_engineering_toolkit.services.scheduling.job_model import Job
+from data_engineering_toolkit.services.scheduling.scheduler_model import Scheduler
 
 
 @dataclass
