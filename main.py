@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 
+
+from ydata_profiling import ProfileReport
+
 # Models
 
 from data_engineering_toolkit.models.formatting.pandas.pandas_formatter_models import (
